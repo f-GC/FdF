@@ -1,17 +1,24 @@
 CC = gcc
-#CFLAGS = -Wall -Wextra -Werror 
+#CFLAGS = -Wall -Wextra -Werror
+FRAMEWORKS = -lXext -lX11 -lm -lbsd
+LIBS = libft/libft.a mlx_linux/libmlx.a
 NAME = fdf
 OBJECTS = *.o
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(CC) -o $(NAME) $(OBJECTS) -L./mlx_linux -lmlx -lXext -lX11 -lm
+	@make -C libft/ all
+	$(CC) -o $(NAME) $(OBJECTS) $(LIBS) $(FRAMEWORKS)
 #Don't forget to add $(CFLAGS) when ready.
 $(OBJECTS): *.c
 	$(CC) -I./mlx_linux -c *.c
 clean:
+	@make -C libft/ clean
 	rm -f *.o
 fclean: clean
+	@make -C libft/ fclean
 	rm -f $(NAME)
 re: fclean all
+norminette:
+	norminette *.c *.h
