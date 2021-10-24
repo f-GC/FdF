@@ -30,7 +30,7 @@ int	get_width(char *file_name)
 	get_next_line(fd, &line);
 	width = ft_wdcounter(line, ' ');
 	free(line);
-	line = NULL; 
+	line = NULL;
 	close(fd);
 	return (width);
 }
@@ -52,6 +52,19 @@ void	extract_map(int *map_line, char *line)
 	free(nums);
 }
 
+void	alloc_map(t_img *img)
+{
+	int	i;
+
+	i = 0;
+	img->map = malloc(sizeof(int *) * (img->height));
+	while (i < img->height)
+	{
+		img->map[i] = malloc(sizeof(int) * (img->width));
+		i++;
+	}
+}
+
 void	read_file(char *file_name, t_img *img)
 {
 	int		fd;
@@ -63,13 +76,7 @@ void	read_file(char *file_name, t_img *img)
 		appout(img, 0);
 	img->height = get_height(file_name);
 	img->width = get_width(file_name);
-	img->map = malloc(sizeof(int *) * (img->height));
-	i = 0;
-	while (i < img->height)
-	{
-		img->map[i] = malloc(sizeof(int) * (img->width));
-		i++;
-	}
+	alloc_map(img);
 	i = 0;
 	while (get_next_line(fd, &line))
 	{
