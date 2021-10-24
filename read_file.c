@@ -12,7 +12,10 @@ int	get_height(char *file_name)
 	{
 		height++;
 		free(line);
+		line = NULL;
 	}
+	if (line != NULL)
+		free(line);
 	close(fd);
 	return (height);
 }
@@ -27,6 +30,7 @@ int	get_width(char *file_name)
 	get_next_line(fd, &line);
 	width = ft_wdcounter(line, ' ');
 	free(line);
+	line = NULL; 
 	close(fd);
 	return (width);
 }
@@ -42,6 +46,7 @@ void	extract_map(int *map_line, char *line)
 	{
 		map_line[i] = ft_atoi(nums[i]);
 		free(nums[i]);
+		nums[i] = NULL;
 		i++;
 	}
 	free(nums);
@@ -58,11 +63,11 @@ void	read_file(char *file_name, t_img *img)
 		appout(img, 0);
 	img->height = get_height(file_name);
 	img->width = get_width(file_name);
-	img->map = (int **)malloc(sizeof(int *) * (img->height + 1));
+	img->map = malloc(sizeof(int *) * (img->height));
 	i = 0;
-	while (i <= img->height)
+	while (i < img->height)
 	{
-		img->map[i] = (int *)malloc(sizeof(int) * (img->width + 1));
+		img->map[i] = malloc(sizeof(int) * (img->width));
 		i++;
 	}
 	i = 0;
@@ -70,8 +75,10 @@ void	read_file(char *file_name, t_img *img)
 	{
 		extract_map(img->map[i], line);
 		free(line);
+		line = NULL;
 		i++;
 	}
+	if (line != NULL)
+		free(line);
 	close(fd);
-	img->map[i] = NULL;
 }

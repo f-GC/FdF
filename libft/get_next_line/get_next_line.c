@@ -5,98 +5,85 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarcia- <fgarcia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 11:24:47 by fgarcia-          #+#    #+#             */
-/*   Updated: 2021/09/06 20:46:57 by fgarcia-         ###   ########.fr       */
+/*   Created: 2019/11/24 16:23:25 by fgarcia-          #+#    #+#             */
+/*   Updated: 2019/12/20 12:14:31 by fgarcia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_arr	*newlist(const int fd)
+int		nl_check(char *str)
 {
-	t_arr	*new;
+	int cont;
 
-	new = (t_arr *)malloc(sizeof(t_arr));
-	if (!(new))
-		return (NULL);
-	new->fd = fd;
-	new->rest = ft_strnew(BUFF_SIZE);
-	new->next = NULL;
-	return (new);
-}
-
-char	*checkrest(char **p_n, char *rest)
-{
-	char	*str;
-
-	*p_n = ft_strchr(rest, '\n');
-	if (*p_n != NULL)
+	cont = 0;
+	while (str[cont])
 	{
-		str = ft_strsub(rest, 0, *p_n - rest);
-		ft_strcpy(rest, ++(*p_n));
+		if (str[cont] == '\n')
+			return (1);
+		cont++;
 	}
-	else
-	{
-		str = ft_strnew(ft_strlen(rest) + 1);
-		ft_strcat(str, rest);
-		ft_strclr(rest);
-	}
-	return (str);
+	return (0);
 }
 
-int	get_line_extra(int a, int b, int c)
+int		return_func(char **out, char **line, int rc)
 {
-	if (a || b || c)
-		return (1);
-	else
-		return (0);
-}
+	char	*tmp;
+	int		len;
 
-int	get_line(const int fd, char **line, char *rest)
-{
-	char			buf[BUFF_SIZE + 1];
-	char			*p_n;
-	char			*tmp;
-	int				rd;
-
-	p_n = NULL;
-	rd = 1;
-	*line = checkrest(&p_n, rest);
-	while (p_n == 0 && ((rd = read(fd, buf, BUFF_SIZE)) != 0))
-	{
-		buf[rd] = '\0';
-		p_n = ft_strchr(buf, '\n');
-		if (p_n != NULL)
-		{
-			ft_strcpy(rest, ++p_n);
-			ft_strclr(--p_n);
-		}
-		tmp = *line;
-		*line = ft_strjoin(tmp, buf);
-		if (!(*line) || rd < 0)
-			return (-1);
-		ft_strdel(&tmp);
-	}
-	return (get_line_extra(ft_strlen(*line), ft_strlen(rest), rd));
-}
-
-int	get_next_line(const int fd, char **line)
-{
-	static t_arr	*list;
-	t_arr			*tmp;
-	int				ret;
-
-	if (fd < 0 || line == 0)
+	len = 0;
+	if (rc < 0)
 		return (-1);
-	if (!list)
-		list = newlist(fd);
-	tmp = list;
-	while (tmp->fd != fd)
+	while ((*out)[len] != '\n' && (*out)[len] != '\0')
+		len++;
+	if ((*out)[len] == '\n')
 	{
-		if (tmp->next == NULL)
-			tmp->next = newlist(fd);
-		tmp = tmp->next;
+		*line = ft_substr(*out, 0, len);
+		tmp = ft_strdup(&(*out)[len + 1]);
+		free(*out);
+		*out = tmp;
 	}
-	ret = get_line(fd, line, tmp->rest);
-	return (ret);
+	else
+	{
+		*line = ft_strdup(*out);
+		ft_strdel(out);
+	}
+	if (rc == 0 && *out == NULL)
+		return (0);
+	return (1);
+}
+
+int		out_of_lines(char **line)
+{
+	*line = ft_strdup("");
+	return (0);
+}
+
+int		get_next_line(int fd, char **line)
+{
+	int			rc;
+	char		buffer[BUFFER_SIZE + 1];
+	static char	*out[FD_SIZE];
+	char		*tmp;
+
+	if (fd < 0 || line == NULL)
+		return (-1);
+	while ((rc = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		buffer[rc] = '\0';
+		if (out[fd] == NULL)
+			out[fd] = ft_strdup(buffer);
+		else
+		{
+			tmp = ft_strjoin(out[fd], buffer);
+			free(out[fd]);
+			out[fd] = tmp;
+		}
+		if (nl_check(out[fd]))
+			break ;
+	}
+	if (rc == 0 && out[fd] == NULL)
+		return (out_of_lines(line));
+	else
+		return (return_func(&out[fd], line, rc));
 }

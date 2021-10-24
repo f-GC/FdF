@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarcia- <fgarcia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/13 16:50:39 by fgarcia-          #+#    #+#             */
-/*   Updated: 2019/12/20 12:15:42 by fgarcia-         ###   ########.fr       */
+/*   Created: 2019/12/13 15:40:49 by fgarcia-          #+#    #+#             */
+/*   Updated: 2019/12/18 19:49:12 by fgarcia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
-# define FD_SIZE 4096
+#include "get_next_line.h"
 
-# include "../libft.h"
-# include <stdlib.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <unistd.h>
-
-int		get_next_line(int fd, char **line);
-void	ft_strdel(char **as);
-
-#endif
+void	ft_strdel(char **as)
+{
+	if (as != NULL && *as != NULL)
+	{
+		free(*as);
+		*as = NULL;
+	}
+}

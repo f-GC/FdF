@@ -9,7 +9,7 @@ void	appout(t_img *img, int flag)
 	else
 	{
 		i = 0;
-		while (i <= img->height)
+		while (i < img->height)
 		{
 			free(img->map[i]);
 			i++;
@@ -43,7 +43,7 @@ int	main(int argc, char **argv)
 		write(2, "Usage: ./fdf \"map_file\".fdf\n", 29);
 		return (0);
 	}
-	img = malloc(sizeof(img));
+	img = malloc(sizeof(t_img));
 	init_img(img, argv[1]);
 	draw(img);
 	draw_menu(img);

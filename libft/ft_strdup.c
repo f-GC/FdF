@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarcia- <fgarcia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/13 16:50:39 by fgarcia-          #+#    #+#             */
-/*   Updated: 2019/12/20 12:15:42 by fgarcia-         ###   ########.fr       */
+/*   Created: 2019/11/07 10:59:09 by fgarcia-          #+#    #+#             */
+/*   Updated: 2019/11/11 21:00:49 by fgarcia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
-# define FD_SIZE 4096
+#include "libft.h"
 
-# include "../libft.h"
-# include <stdlib.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <unistd.h>
+char	*ft_strdup(const char *s1)
+{
+	char	*str;
+	int		len;
 
-int		get_next_line(int fd, char **line);
-void	ft_strdel(char **as);
-
-#endif
+	len = ft_strlen(s1) + 1;
+	if (!(str = malloc(len)))
+		return (0);
+	ft_strlcpy(str, s1, len);
+	return (str);
+}

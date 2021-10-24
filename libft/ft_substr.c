@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgarcia- <fgarcia-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/13 16:50:39 by fgarcia-          #+#    #+#             */
-/*   Updated: 2019/12/20 12:15:42 by fgarcia-         ###   ########.fr       */
+/*   Created: 2019/11/08 12:13:22 by fgarcia-          #+#    #+#             */
+/*   Updated: 2019/11/15 12:44:33 by fgarcia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
-# define FD_SIZE 4096
+#include "libft.h"
 
-# include "../libft.h"
-# include <stdlib.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <unistd.h>
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*str;
+	int		cont;
 
-int		get_next_line(int fd, char **line);
-void	ft_strdel(char **as);
-
-#endif
+	cont = 0;
+	if (s == NULL)
+		return (NULL);
+	if (ft_strlen(s) < start)
+		return (ft_strdup(""));
+	if (!(str = malloc(len + 1)))
+		return (NULL);
+	while (len > 0)
+	{
+		str[cont] = s[start + cont];
+		len--;
+		cont++;
+	}
+	str[cont] = '\0';
+	return (str);
+}

@@ -9,10 +9,10 @@ all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	@make -C libft/ all
-	$(CC) -o $(NAME) $(OBJECTS) $(LIBS) $(FRAMEWORKS)
+	$(CC) -o $(NAME) -g $(OBJECTS) $(LIBS) $(FRAMEWORKS)
 #Don't forget to add $(CFLAGS) when ready.
 $(OBJECTS): *.c
-	$(CC) -I./mlx_linux -c *.c
+	$(CC) -g -I./mlx_linux -c *.c
 clean:
 	@make -C libft/ clean
 	rm -f *.o
