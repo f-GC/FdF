@@ -31,7 +31,7 @@ void	zoom_value(t_img *img, char key)
 	}
 }
 
-int	key_action(int key, t_img *img)
+void	key_action(int key, t_img *img)
 {
 	if (key == 'q')
 		zoom_value(img, 'q');

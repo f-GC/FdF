@@ -1,5 +1,5 @@
 CC = gcc
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 FRAMEWORKS = -lXext -lX11 -lm -lbsd
 LIBS = libft/libft.a mlx_linux/libmlx.a
 NAME = fdf
@@ -9,10 +9,10 @@ all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	@make -C libft/ all
-	$(CC) -o $(NAME) -g $(OBJECTS) $(LIBS) $(FRAMEWORKS)
+	$(CC) -o $(NAME) $(OBJECTS) $(CFLAGS) $(LIBS) $(FRAMEWORKS)
 #Don't forget to add $(CFLAGS) when ready.
 $(OBJECTS): *.c
-	$(CC) -g -I./mlx_linux -c *.c
+	$(CC) $(CFLAGS) -I./mlx_linux -c *.c
 clean:
 	@make -C libft/ clean
 	rm -f *.o

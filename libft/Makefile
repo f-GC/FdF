@@ -10,7 +10,7 @@ $(NAME): $(OBJECTS)
 	ar rcs $(NAME) $(OBJECTS)
 
 $(OBJECTS): $(SRCS)
-	$(CC) -g $(CFLAGS) $(SRCS)
+	$(CC) $(CFLAGS) $(SRCS)
 clean:
 	rm -f $(OBJECTS)
 fclean: clean
