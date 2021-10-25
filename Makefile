@@ -1,7 +1,11 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-FRAMEWORKS = -lXext -lX11 -lm -lbsd
-LIBS = libft/libft.a mlx_linux/libmlx.a
+#Mac
+FRAMEWORKS = -framework OpenGL -framework AppKit -lm
+LIBS = libft/libft.a -lmlx
+#Linux
+#FRAMEWORKS = -lXext -lX11 -lm -lbsd
+#LIBS = libft/libft.a mlx_linux/libmlx.a
 NAME = fdf
 OBJECTS = *.o
 
@@ -11,8 +15,12 @@ $(NAME): $(OBJECTS)
 	@make -C libft/ all
 	$(CC) -o $(NAME) $(OBJECTS) $(CFLAGS) $(LIBS) $(FRAMEWORKS)
 #Don't forget to add $(CFLAGS) when ready.
+#Linux
+#$(OBJECTS): *.c
+#	$(CC) $(CFLAGS) -I./mlx_linux -c *.c
+#Mac
 $(OBJECTS): *.c
-	$(CC) $(CFLAGS) -I./mlx_linux -c *.c
+	$(CC) -I./mlx -c *.c
 clean:
 	@make -C libft/ clean
 	rm -f *.o

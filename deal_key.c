@@ -1,5 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   deal_key.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgarcia- <fgarcia-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/25 18:59:25 by fgarcia-          #+#    #+#             */
+/*   Updated: 2021/10/25 18:59:28 by fgarcia-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
+//For Linux
+/*
 int	valid_key(int key)
 {
 	if (key == 'q' || key == 'e' || key == 'w' || key == 'a'
@@ -31,6 +45,7 @@ void	zoom_value(t_img *img, char key)
 	}
 }
 
+
 void	key_action(int key, t_img *img)
 {
 	if (key == 'q')
@@ -54,6 +69,65 @@ void	key_action(int key, t_img *img)
 	if (key == 't')
 		img->z_multy += 0.5;
 	if (key == 'g')
+		img->z_multy -= 0.5;
+}*/
+
+// For MAC
+
+int	valid_key(int key)
+{
+	if (key == 12 || key == 14 || key == 1 || key == 0
+		|| key == 13 || key == 2 || key == 15 || key == 3
+		|| key == 53 || key == 17 || key == 5)
+		return (1);
+	else
+		return (0);
+}
+
+void	zoom_value(t_img *img, int key)
+{
+	if (key == 14)
+	{
+		if (img->zoom > 2)
+		{
+			if (img->zoom > 5)
+				img->zoom -= 5;
+			if (img->zoom <= 5)
+				img->zoom -= 1;
+		}
+	}
+	if (key == 12)
+	{
+		if (img->zoom >= 5)
+			img->zoom += 5;
+		if (img->zoom < 5)
+			img->zoom += 1;
+	}
+}
+
+void	key_action(int key, t_img *img)
+{
+	if (key == 12)
+		zoom_value(img, 12);
+	if (key == 14)
+		zoom_value(img, 14);
+	if (key == 1)
+		img->y_shift -= 20;
+	if (key == 0)
+		img->x_shift += 20;
+	if (key == 13)
+		img->y_shift += 20;
+	if (key == 2)
+		img->x_shift -= 20;
+	if (key == 15)
+		img->angle -= 0.01;
+	if (key == 3)
+		img->angle += 0.01;
+	if (key == 53)
+		appout(img, 1);
+	if (key == 17)
+		img->z_multy += 0.5;
+	if (key == 5)
 		img->z_multy -= 0.5;
 }
 
