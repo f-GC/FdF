@@ -12,9 +12,9 @@
 
 #include "get_next_line.h"
 
-int		nl_check(char *str)
+int	nl_check(char *str)
 {
-	int cont;
+	int	cont;
 
 	cont = 0;
 	while (str[cont])
@@ -26,7 +26,7 @@ int		nl_check(char *str)
 	return (0);
 }
 
-int		return_func(char **out, char **line, int rc)
+int	return_func(char **out, char **line, int rc)
 {
 	char	*tmp;
 	int		len;
@@ -53,24 +53,20 @@ int		return_func(char **out, char **line, int rc)
 	return (1);
 }
 
-int		out_of_lines(char **line)
+int	out_of_lines(char **line)
 {
 	*line = ft_strdup("");
 	return (0);
 }
 
-int		get_next_line(int fd, char **line)
+void	get_next_line2(int *rc, int fd, char **out, char *buffer)
 {
-	int			rc;
-	char		buffer[BUFFER_SIZE + 1];
-	static char	*out[FD_SIZE];
-	char		*tmp;
+	char	*tmp;
 
-	if (fd < 0 || line == NULL)
-		return (-1);
-	while ((rc = read(fd, buffer, BUFFER_SIZE)) > 0)
+	*rc = read(fd, buffer, BUFFER_SIZE);
+	while (*rc > 0)
 	{
-		buffer[rc] = '\0';
+		buffer[*rc] = '\0';
 		if (out[fd] == NULL)
 			out[fd] = ft_strdup(buffer);
 		else
@@ -81,7 +77,19 @@ int		get_next_line(int fd, char **line)
 		}
 		if (nl_check(out[fd]))
 			break ;
+		*rc = read(fd, buffer, BUFFER_SIZE);
 	}
+}
+
+int	get_next_line(int fd, char **line)
+{
+	int			rc;
+	char		buffer[BUFFER_SIZE + 1];
+	static char	*out[FD_SIZE];
+
+	if (fd < 0 || line == NULL)
+		return (-1);
+	get_next_line2(&rc, fd, out, buffer);
 	if (rc == 0 && out[fd] == NULL)
 		return (out_of_lines(line));
 	else
