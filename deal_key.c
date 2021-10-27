@@ -12,8 +12,25 @@
 
 #include "fdf.h"
 
+int	str_hex(const char *str)
+{
+	int		res;
+	char	c;
+	char	v;
+
+	res = 0;
+	c = *str++;
+	while (c)
+	{
+		v = ((c & 0xF) + (c >> 6)) | ((c >> 3) & 0x8);
+		res = (res << 4) | (int) v;
+		c = *str++;
+	}
+	return (res);
+}
+
 //For Linux
-/*
+
 int	valid_key(int key)
 {
 	if (key == 'q' || key == 'e' || key == 'w' || key == 'a'
@@ -38,13 +55,15 @@ void	zoom_value(t_img *img, char key)
 	}
 	if (key == 'q')
 	{
-		if (img->zoom >= 5)
-			img->zoom += 5;
-		if (img->zoom < 5)
-			img->zoom += 1;
+		if (img->zoom <= 40)
+		{
+			if (img->zoom >= 5)
+				img->zoom += 5;
+			if (img->zoom < 5)
+				img->zoom += 1;
+		}
 	}
 }
-
 
 void	key_action(int key, t_img *img)
 {
@@ -70,10 +89,10 @@ void	key_action(int key, t_img *img)
 		img->z_multy += 0.5;
 	if (key == 'g')
 		img->z_multy -= 0.5;
-}*/
+}
 
 // For MAC
-
+/*
 int	valid_key(int key)
 {
 	if (key == 12 || key == 14 || key == 1 || key == 0
@@ -130,13 +149,16 @@ void	key_action(int key, t_img *img)
 	if (key == 5)
 		img->z_multy -= 0.5;
 }
-
+*/
 int	deal_key(int key, t_img *img)
 {
 	if (valid_key(key))
 	{
-		mlx_clear_window(img->mlx_ptr, img->win_ptr);
 		key_action(key, img);
+		mlx_destroy_image(img->mlx_ptr, img->img);
+		img->img = NULL;
+		init_frame(img);
+		mlx_clear_window(img->mlx_ptr, img->win_ptr);
 		draw(img);
 		draw_menu(img);
 	}

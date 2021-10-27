@@ -26,15 +26,15 @@ void	bresenham(t_pixel a, t_pixel b, t_img *img)
 {
 	float	x_step;
 	float	y_step;
-	int		max;
+	float	max;
 
-	a.z = img->map[(int)a.y][(int)a.x] * img->z_multy * (img->zoom / 10);
-	b.z = img->map[(int)b.y][(int)b.x] * img->z_multy * (img->zoom / 10);
+	set_color(a, b, img);
+	a.z = img->map[(int)a.y][(int)a.x].z * img->z_multy * (img->zoom / 10);
+	b.z = img->map[(int)b.y][(int)b.x].z * img->z_multy * (img->zoom / 10);
 	zoom(&a, &b, img);
 	isometric(&a, img);
 	isometric(&b, img);
 	shift(&a, &b, img);
-	color(a.z, b.z, img);
 	x_step = b.x - a.x;
 	y_step = b.y - a.y;
 	max = biggest(fabs(x_step), fabs(y_step));
@@ -42,7 +42,7 @@ void	bresenham(t_pixel a, t_pixel b, t_img *img)
 	y_step /= max;
 	while ((int)(a.x - b.x) || (int)(a.y - b.y))
 	{
-		mlx_pixel_put(img->mlx_ptr, img->win_ptr, a.x, a.y, img->color);
+		my_mlx_pixel_put(img, a.x, a.y, img->color);
 		a.x += x_step;
 		a.y += y_step;
 	}
@@ -75,4 +75,5 @@ void	draw(t_img *img)
 		}
 		a.y++;
 	}
+	mlx_put_image_to_window(img->mlx_ptr, img->win_ptr, img->img, 0, 0);
 }

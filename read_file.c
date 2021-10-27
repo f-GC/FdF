@@ -47,16 +47,27 @@ int	get_width(char *file_name)
 	return (width);
 }
 
-void	extract_map(int *map_line, char *line)
+void	extract_map(t_val *map_line, char *line)
 {
 	char	**nums;
 	int		i;
+	char	**color;
 
 	nums = ft_split(line, ' ');
 	i = 0;
 	while (nums[i])
 	{
-		map_line[i] = ft_atoi(nums[i]);
+		if (ft_wdcounter(nums[i], ',') == 2)
+		{
+			color = ft_split(nums[i], ',');
+			map_line[i].color = str_hex(&color[1][2]);
+			free(color[0]);
+			free(color[1]);
+			free(color);
+		}
+		else
+			map_line[i].color = 0xffffff;
+		map_line[i].z = ft_atoi(nums[i]);
 		free(nums[i]);
 		nums[i] = NULL;
 		i++;
@@ -69,10 +80,10 @@ void	alloc_map(t_img *img)
 	int	i;
 
 	i = 0;
-	img->map = malloc(sizeof(int *) * (img->height));
+	img->map = malloc(sizeof(t_val *) * (img->height));
 	while (i < img->height)
 	{
-		img->map[i] = malloc(sizeof(int) * (img->width));
+		img->map[i] = malloc(sizeof(t_val) * (img->width));
 		i++;
 	}
 }

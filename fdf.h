@@ -20,6 +20,12 @@
 # include <fcntl.h>
 # include <math.h>
 
+typedef struct value
+{
+	float	z;
+	int		color;
+}			t_val;
+
 typedef struct image
 {
 	void	*mlx_ptr;
@@ -27,12 +33,17 @@ typedef struct image
 	float	zoom;
 	int		height;
 	int		width;
-	int		**map;
+	t_val	**map;
 	int		color;
 	int		x_shift;
 	int		y_shift;
 	float	z_multy;
 	float	angle;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
 }			t_img;
 
 typedef struct pixel
@@ -50,7 +61,10 @@ void	draw_menu(t_img *img);
 void	appout(t_img *img, int flag);
 void	zoom(t_pixel *a, t_pixel *b, t_img *img);
 void	shift(t_pixel *a, t_pixel *b, t_img *img);
-void	color(float z, float z1, t_img *img);
+void	set_color(t_pixel a, t_pixel b, t_img *img);
 int		biggest(float x_step, float y_step);
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	init_frame(t_img *img);
+int		str_hex(const char *str);
 
 #endif

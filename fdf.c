@@ -27,6 +27,8 @@ void	appout(t_img *img, int flag)
 			i++;
 		}
 		free(img->map);
+		if (img->img != NULL)
+			mlx_destroy_image(img->mlx_ptr, img->img);
 		mlx_clear_window(img->mlx_ptr, img->win_ptr);
 		mlx_destroy_window(img->mlx_ptr, img->win_ptr);
 	}
@@ -34,11 +36,19 @@ void	appout(t_img *img, int flag)
 	exit(0);
 }
 
+void	init_frame(t_img *img)
+{
+	img->img = mlx_new_image(img->mlx_ptr, 1500, 1000);
+	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+			&img->line_length, &img->endian);
+}
+
 void	init_img(t_img *img, char *file_name)
 {
 	read_file(file_name, img);
 	img->mlx_ptr = mlx_init();
 	img->win_ptr = mlx_new_window(img->mlx_ptr, 1500, 1000, "FdF");
+	init_frame(img);
 	img->zoom = 25;
 	img->x_shift = 750;
 	img->y_shift = 150;

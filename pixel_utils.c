@@ -28,12 +28,12 @@ void	shift(t_pixel *a, t_pixel *b, t_img *img)
 	b->y += img->y_shift;
 }
 
-void	color(float z, float z1, t_img *img)
+void	set_color(t_pixel a, t_pixel b, t_img *img)
 {
-	if (z || z1)
-		img->color = 0xe80c0c;
+	if (img->map[(int)b.y][(int)b.x].z < img->map[(int)a.y][(int)a.x].color)
+		img->color = img->map[(int)a.y][(int)a.x].color;
 	else
-		img->color = 0xffffff;
+		img->color = img->map[(int)b.y][(int)b.x].color;
 }
 
 int	biggest(float x_step, float y_step)
@@ -42,4 +42,17 @@ int	biggest(float x_step, float y_step)
 		return (x_step);
 	else
 		return (y_step);
+}
+
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
+{
+	int	i;
+
+	if (x >= 0 && x < 1500 && y >= 0 && y < 1000)
+	{
+		i = (x * img->bits_per_pixel / 8) + (y * img->line_length);
+		img->addr[i] = color;
+		img->addr[++i] = color >> 8;
+		img->addr[++i] = color >> 16;
+	}
 }
