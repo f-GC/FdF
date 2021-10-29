@@ -48,6 +48,22 @@ void	bresenham(t_pixel a, t_pixel b, t_img *img)
 	}
 }
 
+void	draw2(t_pixel *a, t_pixel *b, t_img *img, int flag)
+{
+	if (flag == 1)
+	{
+		b->x = a->x + 1;
+		b->y = a->y;
+		bresenham(*a, *b, img);
+	}
+	if (flag == 0)
+	{
+		b->x = a->x;
+		b->y = a->y + 1;
+		bresenham(*a, *b, img);
+	}
+}
+
 void	draw(t_img *img)
 {
 	t_pixel	a;
@@ -60,17 +76,9 @@ void	draw(t_img *img)
 		while (a.x < img->width)
 		{
 			if (a.x < img->width - 1)
-			{
-				b.x = a.x + 1;
-				b.y = a.y;
-				bresenham(a, b, img);
-			}
+				draw2(&a, &b, img, 1);
 			if (a.y < img->height - 1)
-			{
-				b.x = a.x;
-				b.y = a.y + 1;
-				bresenham(a, b, img);
-			}	
+				draw2(&a, &b, img, 0);
 			a.x++;
 		}
 		a.y++;
